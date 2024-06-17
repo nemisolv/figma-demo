@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@components/*": ["components/*"],
+      "@pages/*": ["pages/*"],
+      "@utils/*": ["utils/*"],
+      "@assets/*": ["assets/*"],
+      "@layouts/*": ["src/layouts/*"],
+      "@context/*": ["src/context/*"],
+      "@services/*": ["services/*"],
+      "@constants/*": ["constants/*"],
+      "@configs/*": ["configs/*"],
+      "@stores/*": ["stores/*"],
+      "@data/*": ["src/data/*"],
+      "@helpers/*": ["helpers/*"]
+    }
+  },
+  "include": ["src/**/*"], //   '/**' means include all subdirectories   '/**/*' means include all files in all subdirectories
+  "exclude": ["node_modules", "build", "dist", "public"]
+}
