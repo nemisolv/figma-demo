@@ -1,25 +1,20 @@
-import { useSelector } from 'react-redux';
-import { jwtDecode } from 'jwt-decode';
-import { Link } from 'react-router-dom';
-import { getToken, logOut } from '@utils/authUtils';
-import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 function Header() {
-  const { user } = useSelector((state) => state.user);
+  const [user,setUser] = useState(null);
+  const navigate = useNavigate();
+ 
 
   // check if refresh token is expired
   useEffect(() => {
-    const { refresh_token } = getToken();
-    if (refresh_token) {
-      const decoded = jwtDecode(refresh_token);
-      const currentTime = Date.now() / 1000;
-      if (decoded.exp < currentTime) {
-        logOut();
-      }
-    } else {
-      logOut();
+    if(localStorage.getItem('user')) {
+      setUser(JSON.parse(localStorage.getItem('user')));
+    }else {
+      setUser(null);
+      navigate('/auth/login');
     }
-  });
+  },[ ]);
 
   return (
     <header className="fixed top-0 right-0 left-0 h-[60px] z-10 bg-primary flex-between px-4">
@@ -46,7 +41,10 @@ function Header() {
             <span>{user?.first_name + ' ' + user?.last_name}</span>
           </li>
         )}
-        {user && <li onClick={() => logOut()}>Logout</li>}
+        {user && <li onClick={() =>  {
+          localStorage.clear();
+          navigate('/auth/login')
+        }}>Logout</li>}
       </ul>
     </header>
   );

@@ -1,5 +1,4 @@
 import Button from '@components/Button';
-import Divider from '@components/Divider';
 import TextInput from '@components/TextInput';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
@@ -8,9 +7,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import fbImg from '@assets/images/facebook.png';
 import googleImg from '@assets/images/google.png';
-import { useDispatch } from 'react-redux';
-import { loginGoogle, register } from '@stores/slices/authSlice';
 import { useGoogleLogin } from '@react-oauth/google';
+import { register } from '@services/auth.service';
+import { toast } from 'react-toastify';
 
 const loginSchema = yup.object().shape({
   first_name: yup.string().required('First name is required'),
@@ -37,20 +36,29 @@ function Register() {
     },
   });
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {
-    dispatch(register({ data }));
+  const onSubmit = async (data) => {
+    console.log("🚀 ~ onSubmit ~ data:", data)
+    try {
+      const response = await register(data);
+      localStorage.setItem('user', JSON.stringify(response.data))
+      navigate('/')
+      
+    }catch(error) {
+      console.log("🚀 ~ onSubmit ~ error:", error)
+      toast.error(error.response.data.message);
+
+    }
   };
 
   // oauth2 login with google
   const loginGoogleFunc = useGoogleLogin({
-    onSuccess: async (res) =>  {
-      dispatch(loginGoogle({code: res.code,navigate}))
-    },
-    onError: (error) => console.log(error),
-    flow: 'auth-code',
+    // onSuccess: async (res) =>  {
+    //   dispatch(loginGoogle({code: res.code,navigate}))
+    // },
+    // onError: (error) => console.log(error),
+    // flow: 'auth-code',
   })
 
 
@@ -59,14 +67,14 @@ function Register() {
       <div id="background-login" className="w-1/2"></div>
       <div className="m-auto w-[400px]">
         <h1 className="text-primary font-medium">My anniversary</h1>
-        <Divider />
+        
         <h3 className="text-lg font-semibold">Sign in to your memories</h3>
         <p>
           <Button textLink size="sm" to="/auth/login">
             Sign in
           </Button>
         </p>
-        <Divider />
+        
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex-between gap-4">
             <TextInput
@@ -104,9 +112,9 @@ function Register() {
         </form>
 
         <div className="flex-center gap-3">
-          <Divider />
+          
           <p className="text-center">OR</p>
-          <Divider />
+          
         </div>
 
         {/* login-with-social */}

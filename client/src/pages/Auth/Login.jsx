@@ -1,18 +1,15 @@
 import Button from '@components/Button';
-import Divider from '@components/Divider';
 import TextInput from '@components/TextInput';
 import { useForm } from 'react-hook-form';
 import {  Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-
 import fbImg from '@assets/images/facebook.png';
 import googleImg from '@assets/images/google.png';
-import { useDispatch } from 'react-redux';
-import { login } from '@stores/slices/authSlice';
 import { useGoogleLogin } from '@react-oauth/google';
-import { loginGoogle } from '@stores/slices/authSlice';
+import { toast } from 'react-toastify';
+import { login } from '@services/auth.service';
 
 const loginSchema = yup.object().shape({
     email: yup.string().email("Email is invalid").required("Email is required"),
@@ -32,16 +29,24 @@ function Login() {
     }
   });
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {
-    dispatch(login({data,navigate}))
+  const onSubmit = async(data) => {
+    
+    try {
+    const response =  await login(data);
+      localStorage.setItem('user',JSON.stringify(response.data));
+      navigate('/');
+    }catch(error) {
+      
+      toast.error(error.response.data.message);
+  }
+    
   }
 
   const loginGoogleFunc = useGoogleLogin({
     onSuccess: async (res) =>  {
-      dispatch(loginGoogle({code: res.code,navigate}))
+
     },
     onError: (error) => console.log(error),
     flow: 'auth-code',
@@ -53,7 +58,6 @@ function Login() {
       ></div>
       <div className="m-auto w-[400px]">
         <h1 className="text-primary font-medium">My anniversary</h1>
-        <Divider />
         <h3 className="text-lg font-semibold">Sign in to your memories</h3>
         <p>
           Don't have an account?{' '}
@@ -61,7 +65,6 @@ function Login() {
             Sign up
           </Button>
         </p>
-        <Divider />
         <form onSubmit={handleSubmit(onSubmit)}>
           <TextInput
             label="Email"
@@ -88,9 +91,7 @@ function Login() {
         </Link>
 
         <div className="flex-center gap-3">
-          <Divider />
           <p className="text-center">OR</p>
-          <Divider />
         </div>
 
         {/* login-with-social */}
