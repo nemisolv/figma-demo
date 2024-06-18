@@ -8,14 +8,14 @@ function Header() {
   const navigate = useNavigate();
 
   // check if refresh token is expired
-  useEffect(() => {
-    if (localStorage.getItem('user')) {
-      setUser(JSON.parse(localStorage.getItem('user')));
-    } else {
-      setUser(null);
-      navigate('/auth/login');
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (localStorage.getItem('user')) {
+  //     setUser(JSON.parse(localStorage.getItem('user')));
+  //   } else {
+  //     setUser(null);
+  //     navigate('/auth/login');
+  //   }
+  // }, []);
 
   return (
     <header className="fixed top-0 right-0 left-0 h-[80px] z-10 bg-[#0B0A0A] text-white flex-between px-28">
@@ -27,19 +27,18 @@ function Header() {
         </Link>
       </div>
         <li className='py-2 px-4 cursor-pointer hover:opacity-80 flex items-center gap-1'>
-          <FaBars />
+          {/* <FaBars /> */}
           Thể loại
         </li>
         <li className='py-2 px-4 cursor-pointer hover:opacity-80 flex items-center gap-1'>
-          <FaBars />
+          {/* <FaBars /> */}
           Phân loại theo chương
         </li>
         <li className='py-2 px-4 cursor-pointer hover:opacity-80 flex items-center gap-1'>
-          <FaBars />
+          {/* <FaBars /> */}
           Danh sách{' '}
         </li>
-        <li className='py-2 px-4 cursor-pointer hover:opacity-80 '>Truyện tranh</li>
-        <li className='py-2 px-4 cursor-pointer hover:opacity-80 '>Truyện đã hoàn thành</li>
+      
       </ul>
 
 
@@ -51,12 +50,13 @@ function Header() {
           </li>
         ) : (
           <li className="flex items-center gap-1 ">
-            <img
+            <img 
+
               src={user?.picture}
-              alt={user?.first_name}
+              alt={user?.username}
               className="w-10 h-10 rounded-full object-cover"
             />{' '}
-            <span className='first-letter:uppercase'>{user?.first_name + ' ' + user?.last_name}</span>
+            <span className='first-letter:uppercase'>{user?.username}</span>
           </li>
         )}
         {user && (

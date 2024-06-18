@@ -1,10 +1,11 @@
 
 [
     {
-        "id": 1,
+        "id": "1",
         "title": "Conan the Barbarian",
         "description": "Conan the Barbarian is a fictional sword and sorcery hero who originated in pulp magazines and has since been adapted to books, comics, several films, television programs, video games, role-playing games, and other media. The character was created by writer Robert E. Howard in 1932 in a series of fantasy stories published in Weird Tales magazine.",
         "author": "Robert E. Howard",
-        "thumbnail": "https://upload.wikimedia.org/wikipedia/en/3/33/Conan_the_Barbarian_by_Robert_E._Howard.jpg"
+        "thumbnail": "https://i.pinimg.com/564x/f1/1f/b7/f11fb7389e7bc8b6ec3f0472849ffb2d.jpg",
+        "translator": "Thao Nguyen"
     }
 ]

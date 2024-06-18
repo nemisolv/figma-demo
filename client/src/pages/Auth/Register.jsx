@@ -10,15 +10,24 @@ import googleImg from '@assets/images/google.png';
 import { useGoogleLogin } from '@react-oauth/google';
 import { register } from '@services/auth.service';
 import { toast } from 'react-toastify';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const loginSchema = yup.object().shape({
-  first_name: yup.string().required('First name is required'),
-  last_name: yup.string().required('Last name is required'),
-  email: yup.string().email('Email is invalid').required('Email is required'),
-  password: yup
+  username: yup
     .string()
-    .min(6, 'Password must be greater than or equal 6 characters')
-    .required(),
+    .required('Tên đăng nhập không được để trống')
+    .min(6, 'Tên đăng nhập phải lớn hơn 6 ký tự'),
+  password: yup.string().min(6, 'Mật khẩu phải lớn hơn 6 ký tự').required(),
+  email: yup
+    .string()
+    .email('Email không hợp lệ')
+    .required('Email không được để trống'),
+  phone_number: yup
+    .string()
+    .required('Số điện thoại không được để trống')
+    .min(10, 'Số điện thoại phải chứa 10 ký tự')
+    .max(10, 'Số điện thoại phải chứa 10 ký tự'),
+  confirm_password: yup.string().oneOf([yup.ref('password'), null], 'Mật khẩu không khớp'),
 });
 
 function Register() {
@@ -29,26 +38,25 @@ function Register() {
   } = useForm({
     resolver: yupResolver(loginSchema),
     defaultValues: {
-      first_name: '',
-      last_name: '',
       email: '',
       password: '',
+      phone_number: '',
+      username: '',
+      confirm_password: '',
     },
   });
 
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    console.log("🚀 ~ onSubmit ~ data:", data)
+    console.log('🚀 ~ onSubmit ~ data:', data);
     try {
       const response = await register(data);
-      localStorage.setItem('user', JSON.stringify(response.data))
-      navigate('/')
-      
-    }catch(error) {
-      console.log("🚀 ~ onSubmit ~ error:", error)
+      localStorage.setItem('user', JSON.stringify(response.data));
+      navigate('/');
+    } catch (error) {
+      console.log('🚀 ~ onSubmit ~ error:', error);
       toast.error(error.response.data.message);
-
     }
   };
 
@@ -59,79 +67,93 @@ function Register() {
     // },
     // onError: (error) => console.log(error),
     // flow: 'auth-code',
-  })
-
+  });
 
   return (
-    <div className="max-w-[1200px] w-full rounded-2xl overflow-hidden bg-white mx-auto flex shadow-md">
-      <div id="background-login" className="w-1/2"></div>
-      <div className="m-auto w-[400px]">
-        <h1 className="text-primary font-medium">My anniversary</h1>
-        
-        <h3 className="text-lg font-semibold">Sign in to your memories</h3>
-        <p>
-          <Button textLink size="sm" to="/auth/login">
-            Sign in
-          </Button>
-        </p>
-        
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex-between gap-4">
-            <TextInput
-              label="First name"
-              name="first_name"
-              control={control}
-              errors={errors}
-            />
-            <TextInput
-              label="Last name"
-              name="last_name"
-              control={control}
-              errors={errors}
-            />
-          </div>
+    <div className="max-w-[1200px] w-full rounded-2xl  bg-white mx-auto flex shadow-md">
+      <div id="background-login" className="h-full "></div>
+      <div className="m-auto w-[400px] mr-6">
+      <Link to="/" className='float-right'>
+          <FaArrowLeft />
+        </Link>
+        <h1 className="text-2xl text-center font-medium">Đăng kí</h1>
+
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col gap-y-2"
+        >
           <TextInput
             label="Email"
             name="email"
-            placeholder="Enter your email"
+            placeholder="vd: email@gmail.com"
             control={control}
             errors={errors}
           />
           <TextInput
-            label="Password"
+            label="Tên đăng nhập"
+            name="username"
+            placeholder="tên đăng nhập"
+            control={control}
+            errors={errors}
+          />
+          <TextInput
+            label="Số điện thoại"
+            name="phone_number"
+            placeholder=""
+            control={control}
+            errors={errors}
+          />
+          <TextInput
+            label="Mật khẩu"
             name="password"
-            passwordField
-            placeholder="Enter your password"
+            type="password"
+            placeholder=""
+            control={control}
+            errors={errors}
+          />
+          <TextInput
+            label="Nhập lại mật khẩu"
+            name="confirm_password"
+            type="password"
+            placeholder=""
             control={control}
             errors={errors}
           />
 
-          <Button primary fullWidth className="mt-3">
-            Sign up
+          <Button primary fullWidth className="my-3">
+            Đăng kí
           </Button>
         </form>
+        <div className="flex items-center gap-3">
+          <div className="divider h-[1px] bg-slate-300 w-full"></div>
 
-        <div className="flex-center gap-3">
-          
-          <p className="text-center">OR</p>
-          
+          <div>
+            <p>Hoặc</p>
+          </div>
+          <div className="divider h-[1px] bg-slate-300 w-full"></div>
         </div>
 
         {/* login-with-social */}
-        <div className="mt-4 flex-between gap-4">
-          <a onClick={loginGoogleFunc} className="flex gap-x-2 items-center p-3 h-[38px] w-[180px] shadow rounded-lg cursor-pointer hover:shadow-md ">
+        <div className="mt-4 flex items-center justify-center gap-8 ">
+          <div onClick={loginGoogleFunc} className="f">
             <div>
-              <img src={googleImg} alt="" className="w-4" />
+              <img src={googleImg} alt="" className="size-12 " />
             </div>
-            <span className="text-xs">Continue with Google</span>
-          </a>
-          <a className="flex gap-x-2 items-center p-3 h-[38px] w-[180px] shadow rounded-lg cursor-pointer hover:shadow-md ">
+          </div>
+
+          <div onClick={loginGoogleFunc} className="f">
             <div>
-              <img src={fbImg} alt="" className="w-4" />
+              <img src={fbImg} alt="" className="size-12 " />
             </div>
-            <span className="text-xs">Continue with Facebook</span>
-          </a>
+          </div>
         </div>
+
+        <Link
+          to="/auth/login"
+          className=" text-center block hover:underline  my-3 cursor-pointer hover:opacity-80"
+        >
+          Đăng nhập tài khoản đã có
+        </Link>
       </div>
     </div>
   );
