@@ -1,5 +1,6 @@
 import mainRoutes from './main.route';
 import authRoutes from './auth.route';
+import adminRoutes from './admin.route'
 
 import PageNotFound from '@pages/PageNotFound';
 import { useRoutes } from 'react-router-dom';
@@ -15,6 +16,6 @@ const noLayoutRoutes = [
     },
     ];
 
-const Routes = () => useRoutes([authRoutes, mainRoutes, ...noLayoutRoutes]);
+const Routes = () => useRoutes([authRoutes, mainRoutes,adminRoutes,  ...noLayoutRoutes]);
 
 export default Routes;
