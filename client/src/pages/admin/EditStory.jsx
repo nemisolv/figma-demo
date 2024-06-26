@@ -62,8 +62,8 @@ const EditStory = () => {
 
     try {
       await updateStory(id,updatedStory);
-      toast.success('Update story successfully!');
-      navigate('/admin');
+      toast.success('Cập nhật truyện thành công!');
+      navigate('/admin/stories');
     } catch (error) {
       toast.error(error.response.data.messsage);
     }

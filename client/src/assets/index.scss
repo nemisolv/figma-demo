@@ -61,6 +61,9 @@ html {
 }
 
 @layer components {
+  .dropdown-parent:hover > ul {
+    display: block;
+  }
   .hide-scrollbar {
     scrollbar-width: none; /* For Firefox */
     -ms-overflow-style: none; /* For Internet Explorer and Edge */

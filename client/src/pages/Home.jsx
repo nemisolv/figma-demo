@@ -137,8 +137,8 @@ const fakeStories2 = [
   {
     id: 1,
     title: 'Âm quan minh thế',
-    hot: true,
-    completed: true,
+    hot: false,
+    completed: false,
     tags: ['Hành động', 'Huyền huyễn'],
     chap: 200,
     createdAt: new Date(),
@@ -217,7 +217,7 @@ function Home() {
                           >
                             {story.title}{' '}
                             {story.completed && (
-                              <span className="text-green">Full</span>
+                              <span className="text-green-500">Full</span>
                             )}
                             {story.hot && (
                               <span className="text-red-600">Hot</span>

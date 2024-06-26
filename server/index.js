@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const fs = require("fs");
-const users = require("./data/users.json");
+let users = require("./data/users.json");
 const app = express();
 let stories = require("./data/stories.json");
 app.use(cors());
@@ -123,6 +123,55 @@ const getLastId = () => {
   if(stories.length ===0) return 0;
   else return stories[stories.length-1].id ;
 }
+
+
+app.get("/accounts", (req, res) => {
+  if (users.length === 0) {
+    res.status(204).json({ message: "Danh sách tài khoản rỗng" });
+  } else {
+    res.status(200).json(users);
+  }
+});
+
+app.get("/accounts/:id", (req, res) => {
+  const { id } = req.params;
+  const user = users.find((user) => user.id === Number(id));
+  if (!user) {
+    return res.status(404).json({
+      message: "Không tìm thấy tài khoản",
+    });
+  }
+  res.status(200).json(user);
+});
+
+app.delete("/accounts/:id", (req, res) => {
+  const { id } = req.params;
+  users = users.filter((user) => user.id !== Number(id));
+  fs.writeFileSync("./data/users.json", JSON.stringify(users), "utf8");
+  return res.status(200).json({
+    message: "Xóa tài khoản thành công",
+  });
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.listen(8080, () => {
   console.log("Server is running on port 8080");

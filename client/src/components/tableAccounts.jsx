@@ -1,13 +1,16 @@
 import { deleteStory } from '@services/story.service';
 import React, { useRef } from 'react';
-import { FaTimes } from 'react-icons/fa';
 import { MdEdit } from 'react-icons/md';
 import { MdDelete } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import Modal from 'react-modal';
+import { FaTimes } from 'react-icons/fa';
+import { deleteAccount } from '@services/account.service';
+import { toast } from 'react-toastify';
 
-const Table = ({ stories, setStories }) => {
+
+const TableAccounts = ({ accounts, setAccounts }) => {
+  
   const navigate = useNavigate();
   const [modalIsOpen, setIsOpen] = React.useState(false);
   const idRef = useRef(null);
@@ -40,42 +43,23 @@ const Table = ({ stories, setStories }) => {
     openModal();
     idRef.current = id;
   };
-
-  // const handleDelete = async (id) => {
-  //   // try {
-  //   //   await deleteStory(id);
-  //   //   stories = stories.filter((story) => (story.id !== id));
-  //   //   setStories(stories)
-  //   //   toast.success('Delete story successfully!');
-  //   // } catch (error) {
-  //   //   toast.error('Could not delete story');
-  //   // }
-  // };
-
-  const handleEdit = (id) => {};
-
-  const handleSuccessToastClose = () => {};
-
-  const handleEditSuccess = () => {};
-
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-    
-
       <table className="w-full text-sm text-left text-gray-700 bg-white">
         <thead className="text-xs uppercase bg-gray-100 text-gray-600">
           <tr>
+            <th scope="col" className="px-6 py-3"></th>
             <th scope="col" className="px-6 py-3">
               Tên
             </th>
             <th scope="col" className="px-6 py-3">
-              Tác Giả
+              Tuổi
             </th>
             <th scope="col" className="px-6 py-3">
-              Tình Trạng
+              Địa chỉ
             </th>
             <th scope="col" className="px-6 py-3">
-              Thể Loại
+              Số điện thoại
             </th>
             <th scope="col" className="px-6 py-3">
               Hành Động
@@ -83,26 +67,30 @@ const Table = ({ stories, setStories }) => {
           </tr>
         </thead>
         <tbody>
-          {stories.map((story) => (
-            <tr key={story.id} className="border-b bg-white hover:bg-gray-50">
+          {accounts.map((acc) => (
+            <tr key={acc.email} className="border-b bg-white hover:bg-gray-50">
               <th scope="row" className="px-6 py-4 font-medium text-gray-900">
-                {story.name}
+                <input type="checkbox" name="" id="" />
               </th>
-              <td className="px-6 py-4">{story.author}</td>
-              <td className="px-6 py-4">{story.status}</td>
-              <td className="px-6 py-4">{story.genre}</td>
+              <th scope="row" className="px-6 py-4 font-medium text-gray-900">
+                {acc.first_name + ' ' + acc.last_name}
+              </th>
+
+              <td className="px-6 py-4">{acc.age || 21}</td>
+              <td className="px-6 py-4">{acc.address}</td>
+              <td className="px-6 py-4">{acc.phone_number}</td>
               <td className="px-6 py-4">
                 <button
                   className="text-blue-500 hover:text-blue-700 mx-2"
                   onClick={() => {
-                  navigate(`/admin/edit-story/${story.id}`)
+                    navigate(`/admin/edit-account/${acc.id}`);
                   }}
                 >
                   <MdEdit />
                 </button>
                 <button
                   className="text-red-500 hover:text-red-700 mx-2"
-                  onClick={() => handleDelete(story.id)}
+                  onClick={() => handleDelete(acc.id)}
                 >
                   <MdDelete />
                 </button>
@@ -130,11 +118,11 @@ const Table = ({ stories, setStories }) => {
         <div className='flex justify-end mt-3'>
           <button
             onClick={async() => {
-            await  deleteStory(idRef.current);
-              setStories(stories.filter((story) => story.id !== idRef.current));
+            await  deleteAccount(idRef.current);
+              setAccounts(accounts.filter((acc) => acc.id !== idRef.current));
 
               closeModal();
-              toast.success('Xóa truyện thành công!');
+              toast.success('Xóa tài khoản thành công');
             }}
             className="bg-red-500 text-white px-4 py-2 rounded-lg mx-2"
           >
@@ -152,4 +140,4 @@ const Table = ({ stories, setStories }) => {
   );
 };
 
-export default Table;
+export default TableAccounts;

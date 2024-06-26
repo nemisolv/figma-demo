@@ -1,4 +1,6 @@
 import MainLayout from '@layouts/MainLayout';
+import EditProfile from '@pages/EditProfile';
+import ListStoriesByNumOfChap from '@pages/ListStoriesByNumOfChap';
 import { lazy } from 'react';
 
 const Home = lazy(() => import('@pages/Home'));
@@ -20,6 +22,14 @@ const mainRoutes = {
       path: 'stories/preview-chapter/:id',
       element: <StoryPreviewChapter />,
     },
+    {
+      path: 'stories/list-by-chapter',
+      element: <ListStoriesByNumOfChap />,
+    },
+    {
+      path: '/me/edit',
+      element: <EditProfile/>
+    }
   ],
 };
 
